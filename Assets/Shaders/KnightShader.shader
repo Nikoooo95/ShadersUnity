@@ -6,9 +6,6 @@
 		//Main Texture
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
 
-		//Mask from the Main Texture
-		_MaskTex("Mask", 2D) = "white" {}
-
 		//Color for the texture
 		_Color("Color", Color) = (1,1,1,1)
 
@@ -33,14 +30,10 @@
 		//Main Texture
         sampler2D _MainTex;
 
-		//Mask from the Main Texture
-		sampler2D _MaskTex;
-
 		//UV
         struct Input
         {
             float2 uv_MainTex;
-			float2 uv_MaskTex;
         };
 
 		//Color for the texture
@@ -63,18 +56,14 @@
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
             fixed4 tex = tex2D (_MainTex, IN.uv_MainTex);
-			fixed4 mask = tex2D(_MaskTex, IN.uv_MainTex);
-
-			//Set Albedo from texture color
-            o.Albedo = tex.rgb;
 
 			//Albedo = Mask * Color + Original Albedo * (1 - Mask)
-			o.Albedo = mask * _Color + o.Albedo * (1.0 - mask);
+			o.Albedo = tex.a * _Color + tex.rgb * (1.0 - tex.a);
 
             // Metallic and smoothness come from slider variables
             o.Metallic = _Metallic;
             o.Smoothness = _Glossiness;
-            o.Alpha = tex.a;
+            
         }
         ENDCG
     }

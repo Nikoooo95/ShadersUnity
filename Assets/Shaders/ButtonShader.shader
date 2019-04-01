@@ -4,9 +4,6 @@
     {
 		//Button Texture
         _MainTex ("Main Texture", 2D) = "white" {}
-		
-		//Mask from Button Texture
-		_MaskMainTexture ("Mask Main Texture", 2D) = "white" {}
 
 		//Loading Mask Texture
 		_LoadingMask("Loading Mask Effect", 2D) = "white" {}
@@ -60,9 +57,6 @@
 			//Main Texture
             sampler2D _MainTex;
 
-			//Mask from Button Texture
-			sampler2D _MaskMainTexture;
-
 			//Loading Mask Texture
 			sampler2D _LoadingMask;
 
@@ -87,7 +81,6 @@
             {
                 fixed4 result = tex2D(_MainTex, i.uv);
 				float2 uv = flowUV(i.uv, _Time.y);
-				fixed4 mask = tex2D(_MaskMainTexture, i.uv);
 				fixed4 loadingMask = tex2D(_LoadingMask, i.uv);
 				fixed4 noise = tex2D(_Noise, uv);
 
@@ -96,7 +89,7 @@
 
 				//Depending of Type Effect value, will apply the Glow Effect or the Loading Effet
 
-				result.rgb = _TypeEffect * (noise.rgb * _Color * mask.rgb + result.rgb) +
+				result.rgb = _TypeEffect * (noise.rgb * _Color * result.a + result.rgb) +
 					(1 - _TypeEffect) *  ((step(loadingMask.r, _RangeEffect) * Luminance(result.rgb) * 0.5) + ((1 - step(loadingMask.r, _RangeEffect))* result.rgb));
 				
                 return result;
