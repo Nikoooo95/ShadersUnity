@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Button2Collor : MonoBehaviour
+public class ButtonCollor : MonoBehaviour
 {
 
     
@@ -37,6 +37,8 @@ public class Button2Collor : MonoBehaviour
     public void Awake()
     {
         GetComponent<Image>().material.SetFloat("_TypeEffect", 1);
+        isRadial = false;
+        GetComponent<Image>().material.SetTexture("_LoadingMask", linearEffect);
     }
 
     /// <summary>
